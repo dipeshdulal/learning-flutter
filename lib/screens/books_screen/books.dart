@@ -11,6 +11,21 @@ class BooksScreen extends StatefulWidget {
 class _BooksScreenState extends State<BooksScreen> {
   int _currentIndex = 0;
 
+  static const List<Widget> _options = <Widget>[
+    Text(
+      "Index 0: Home",
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+    Text(
+      "Index 1: Business",
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+    Text(
+      "Index 2: School",
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,10 +76,12 @@ class _BooksScreenState extends State<BooksScreen> {
             children: [
               Text("book screen"),
               TextButton(
-                  onPressed: () {
-                    AutoRouter.of(context).pushNamed("/books/Karma");
-                  },
-                  child: Text("Goto details page"))
+                onPressed: () {
+                  AutoRouter.of(context).pushNamed("/books/Karma");
+                },
+                child: Text("Goto details page"),
+              ),
+              _options.elementAt(_currentIndex),
             ],
           ),
         ),
