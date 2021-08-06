@@ -7,8 +7,9 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
-import '../screens/home_screen.dart' as _i5;
+import '../screens/home_screen.dart' as _i6;
 import '../screens/login_screen.dart' as _i4;
+import '../screens/register_screen.dart' as _i5;
 import 'guards/auth_guard.dart' as _i3;
 
 class AppRouter extends _i1.RootStackRouter {
@@ -33,10 +34,17 @@ class AppRouter extends _i1.RootStackRouter {
               data.argsAs<LoginRouteArgs>(orElse: () => const LoginRouteArgs());
           return _i4.LoginScreen(key: args.key);
         }),
+    RegisterRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<RegisterRouteArgs>(
+              orElse: () => const RegisterRouteArgs());
+          return _i5.RegisterScreen(key: args.key);
+        }),
     HomeRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return const _i5.HomeScreen();
+          return const _i6.HomeScreen();
         })
   };
 
@@ -49,7 +57,8 @@ class AppRouter extends _i1.RootStackRouter {
               path: '', redirectTo: 'home', fullMatch: true),
           _i1.RouteConfig(HomeRoute.name, path: 'home')
         ]),
-        _i1.RouteConfig(LoginRoute.name, path: '/login')
+        _i1.RouteConfig(LoginRoute.name, path: '/login'),
+        _i1.RouteConfig(RegisterRoute.name, path: '/register')
       ];
 }
 
@@ -69,6 +78,19 @@ class LoginRoute extends _i1.PageRouteInfo<LoginRouteArgs> {
 
 class LoginRouteArgs {
   const LoginRouteArgs({this.key});
+
+  final _i2.Key? key;
+}
+
+class RegisterRoute extends _i1.PageRouteInfo<RegisterRouteArgs> {
+  RegisterRoute({_i2.Key? key})
+      : super(name, path: '/register', args: RegisterRouteArgs(key: key));
+
+  static const String name = 'RegisterRoute';
+}
+
+class RegisterRouteArgs {
+  const RegisterRouteArgs({this.key});
 
   final _i2.Key? key;
 }

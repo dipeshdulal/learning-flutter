@@ -10,6 +10,9 @@ void main() {
   runApp(ProviderScope(child: MyApp()));
 }
 
+final appRouterProvider =
+    Provider((ref) => AppRouter(authGuard: ref.watch(authGuardProvider)));
+
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   @override
@@ -17,7 +20,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _appRouter = AppRouter(authGuard: AuthGuard());
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
@@ -35,11 +37,14 @@ class _MyAppState extends State<MyApp> {
             );
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            return MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              routeInformationParser: _appRouter.defaultRouteParser(),
-              routerDelegate: _appRouter.delegate(),
-            );
+            return Consumer(builder: (context, ref, _) {
+              return MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                routeInformationParser:
+                    ref.watch(appRouterProvider).defaultRouteParser(),
+                routerDelegate: ref.watch(appRouterProvider).delegate(),
+              );
+            });
           }
 
           return Scaffold(

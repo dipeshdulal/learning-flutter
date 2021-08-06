@@ -4,8 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_rnd/services/auth_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LoginScreen extends HookConsumerWidget {
-  LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends HookConsumerWidget {
+  RegisterScreen({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 
@@ -13,6 +13,8 @@ class LoginScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
+    final passwordConfirmationController = useTextEditingController();
+
     final authState = ref.watch(authServiceProvider);
 
     return Scaffold(
@@ -25,7 +27,7 @@ class LoginScreen extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Login",
+                "Register",
                 textAlign: TextAlign.left,
                 style: Theme.of(context).textTheme.headline6,
               ),
@@ -53,17 +55,34 @@ class LoginScreen extends HookConsumerWidget {
                   labelText: "Password",
                 ),
               ),
+              TextFormField(
+                controller: passwordConfirmationController,
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Password Confirmation is required";
+                  }
+                  if (value != passwordController.value.text) {
+                    return "Password and Password Confirmation doesn't match";
+                  }
+                },
+                decoration: InputDecoration(
+                  labelText: "Password Confirmation",
+                ),
+              ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 TextButton(
                     onPressed: () {
-                      AutoRouter.of(context).replaceNamed("/register");
+                      AutoRouter.of(context).replaceNamed("/login");
                     },
-                    child: Text("Register")),
+                    child: Text("Login")),
                 ElevatedButton(
                   onPressed: !authState.isLoading
                       ? () async {
                           if (_formKey.currentState!.validate()) {
-                            await ref.read(authServiceProvider.notifier).signIn(
+                            await ref
+                                .read(authServiceProvider.notifier)
+                                .registerUser(
                                   email: emailController.value.text,
                                   password: passwordController.value.text,
                                 );
@@ -86,7 +105,7 @@ class LoginScreen extends HookConsumerWidget {
                             SizedBox(width: 10),
                           ],
                         ),
-                      Text("Login"),
+                      Text("Register"),
                     ],
                   ),
                 ),

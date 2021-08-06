@@ -5,21 +5,28 @@ final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
 
 final authServiceProvider =
     StateNotifierProvider<AuthService, AuthState>((ref) {
-  return AuthService(auth: ref.watch(firebaseAuthProvider));
+  return AuthService(ref: ref);
 });
 
 class AuthService extends StateNotifier<AuthState> {
-  AuthService({required this.auth}) : super(AuthState(isLoading: false)) {
-    this.auth.userChanges().listen(authChanged);
+  ProviderRefBase ref;
+
+  AuthService({required this.ref}) : super(AuthState(isLoading: false)) {
+    this.ref.read(firebaseAuthProvider).authStateChanges().listen((User? user) {
+      AuthState.withUser(user);
+    });
   }
 
-  final FirebaseAuth auth;
+  Stream<User?> getUserStream() {
+    return this.ref.read(firebaseAuthProvider).userChanges();
+  }
 
   registerUser({String email = "", String password = ""}) async {
     try {
       state = AuthState.withLoading(true);
       UserCredential cred = await this
-          .auth
+          .ref
+          .read(firebaseAuthProvider)
           .createUserWithEmailAndPassword(email: email, password: password);
       state = AuthState.withUser(cred.user);
       return cred.user;
@@ -32,18 +39,13 @@ class AuthService extends StateNotifier<AuthState> {
     try {
       state = AuthState.withLoading(true);
       UserCredential cred = await this
-          .auth
+          .ref
+          .read(firebaseAuthProvider)
           .signInWithEmailAndPassword(email: email, password: password);
       state = AuthState.withUser(cred.user);
       return cred.user;
     } catch (e) {
       state = AuthState.withError(e.toString());
-    }
-  }
-
-  authChanged(User? user) {
-    if (user == null) {
-      state = AuthState.withUser(null);
     }
   }
 }
