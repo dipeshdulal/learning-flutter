@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,22 +14,10 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Text("Hello world!"),
-              ),
-              TextButton(
-                onPressed: () {
-                  AutoRouter.of(context).navigateNamed("/test/Dipesh");
-                },
-                child: Text("Goto Next Page"),
-              ),
-              TextButton(
-                onPressed: () {
-                  AutoRouter.of(context).pushNamed("/books");
-                },
-                child: Text("Goto Books Page"),
-              ),
+              Text(
+                "Welcome to home",
+                style: Theme.of(context).textTheme.headline5,
+              )
             ],
           ),
         ),
