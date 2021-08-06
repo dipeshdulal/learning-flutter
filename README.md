@@ -1,6 +1,6 @@
 # Flutter Firebase Project
 
-Flutter sample project to learn different things in flutter and documenting them:
+Flutter sample project to learn different things in flutter.
 
 ### TODOs
 - [ ] Firebase Authentication (Social Signup etc.)
