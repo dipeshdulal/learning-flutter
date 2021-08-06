@@ -31,6 +31,10 @@ class AuthService extends StateNotifier<AuthState> {
     }
   }
 
+  signOut() async {
+    await this.ref.read(firebaseAuthProvider).signOut();
+  }
+
   signIn({String email = "", String password = ""}) async {
     try {
       state = AuthState.withLoading(true);
