@@ -13,12 +13,8 @@ class AuthService extends StateNotifier<AuthState> {
 
   AuthService({required this.ref}) : super(AuthState(isLoading: false)) {
     this.ref.read(firebaseAuthProvider).authStateChanges().listen((User? user) {
-      AuthState.withUser(user);
+      state = AuthState.withUser(user);
     });
-  }
-
-  Stream<User?> getUserStream() {
-    return this.ref.read(firebaseAuthProvider).userChanges();
   }
 
   registerUser({String email = "", String password = ""}) async {

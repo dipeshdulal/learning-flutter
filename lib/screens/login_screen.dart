@@ -55,10 +55,11 @@ class LoginScreen extends HookConsumerWidget {
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 TextButton(
-                    onPressed: () {
-                      AutoRouter.of(context).replaceNamed("/register");
-                    },
-                    child: Text("Register")),
+                  onPressed: () {
+                    AutoRouter.of(context).replaceNamed("/register");
+                  },
+                  child: Text("Register"),
+                ),
                 ElevatedButton(
                   onPressed: !authState.isLoading
                       ? () async {
