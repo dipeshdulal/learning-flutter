@@ -2,12 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rnd/router/app_router.gr.dart';
+import 'package:flutter_rnd/router/guards/auth_guard.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(ProviderScope(child: MyApp()));
 }
-
-final _appRouter = AppRouter();
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
@@ -16,6 +17,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _appRouter = AppRouter(authGuard: AuthGuard());
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
@@ -34,6 +36,7 @@ class _MyAppState extends State<MyApp> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return MaterialApp.router(
+              debugShowCheckedModeBanner: false,
               routeInformationParser: _appRouter.defaultRouteParser(),
               routerDelegate: _appRouter.delegate(),
             );
