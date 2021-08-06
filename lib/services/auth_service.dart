@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
@@ -44,6 +45,31 @@ class AuthService extends StateNotifier<AuthState> {
           .signInWithEmailAndPassword(email: email, password: password);
       state = AuthState.withUser(cred.user);
       return cred.user;
+    } catch (e) {
+      state = AuthState.withError(e.toString());
+    }
+  }
+
+  signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final creds = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        final userCreds = await this
+            .ref
+            .read(firebaseAuthProvider)
+            .signInWithCredential(creds);
+
+        state = AuthState.withUser(userCreds.user);
+        return null;
+      }
+      throw new Exception("error signing in ...");
     } catch (e) {
       state = AuthState.withError(e.toString());
     }

@@ -100,7 +100,31 @@ class LoginScreen extends HookConsumerWidget {
                       .textTheme
                       .subtitle2
                       ?.copyWith(color: Colors.red),
-                )
+                ),
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await ref
+                        .read(authServiceProvider.notifier)
+                        .signInWithGoogle();
+                    AutoRouter.of(context).replaceNamed("/home");
+                  },
+                  child: Container(
+                    width: 270,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.android),
+                        SizedBox(width: 10),
+                        Text("Sign in with Google"),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

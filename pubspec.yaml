@@ -28,6 +28,7 @@ dependencies:
   flutter_hooks: ^0.18.0
   hooks_riverpod: ^1.0.0-dev.6
   firebase_auth: "^3.0.1"
+  google_sign_in: ^5.0.7
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

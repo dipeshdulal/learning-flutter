@@ -26,7 +26,7 @@ class HomeScreen extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Welcome to home",
+                "Welcome ${ref.watch(authServiceProvider).user?.displayName ?? ""}",
                 style: Theme.of(context).textTheme.headline5,
               )
             ],
