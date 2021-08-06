@@ -3,7 +3,7 @@
 Flutter sample project to learn different things in flutter.
 
 ### TODOs
-- [ ] Firebase Authentication (Social Signup etc.)
+- [x] Firebase Authentication
 - [ ] Riverpod, Flutter Hooks, Freezed
 - [ ] Firestore database usage.
 - [ ] Navigation 
