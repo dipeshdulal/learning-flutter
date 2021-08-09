@@ -63,5 +63,10 @@
 	</array>
 	<!-- End of the Google Sign-in Section -->
 
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ja</string>
+		<string>en</string>
+	</array>
 </dict>
 </plist>

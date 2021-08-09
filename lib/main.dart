@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,9 +6,19 @@ import 'package:flutter_rnd/router/app_router.gr.dart';
 import 'package:flutter_rnd/router/guards/auth_guard.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(ProviderScope(child: MyApp()));
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      path: 'assets/translations',
+      startLocale: Locale('ja'),
+      supportedLocales: [Locale('ja')],
+      child: ProviderScope(
+        child: MyApp(),
+      ),
+    ),
+  );
 }
 
 final appRouterProvider =
@@ -26,6 +37,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       home: FutureBuilder(
         builder: (context, snapshot) {
           if (snapshot.hasError) {
