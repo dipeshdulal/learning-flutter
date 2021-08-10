@@ -7,18 +7,13 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
-import '../screens/home_screen.dart' as _i6;
-import '../screens/login_screen.dart' as _i4;
-import '../screens/register_screen.dart' as _i5;
-import 'guards/auth_guard.dart' as _i3;
+import '../screens/home_screen.dart' as _i5;
+import '../screens/login_screen.dart' as _i3;
+import '../screens/register_screen.dart' as _i4;
 
 class AppRouter extends _i1.RootStackRouter {
-  AppRouter(
-      {_i2.GlobalKey<_i2.NavigatorState>? navigatorKey,
-      required this.authGuard})
+  AppRouter([_i2.GlobalKey<_i2.NavigatorState>? navigatorKey])
       : super(navigatorKey);
-
-  final _i3.AuthGuard authGuard;
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
@@ -32,27 +27,25 @@ class AppRouter extends _i1.RootStackRouter {
         builder: (data) {
           final args =
               data.argsAs<LoginRouteArgs>(orElse: () => const LoginRouteArgs());
-          return _i4.LoginScreen(key: args.key);
+          return _i3.LoginScreen(key: args.key);
         }),
     RegisterRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<RegisterRouteArgs>(
               orElse: () => const RegisterRouteArgs());
-          return _i5.RegisterScreen(key: args.key);
+          return _i4.RegisterScreen(key: args.key);
         }),
     HomeRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return const _i6.HomeScreen();
+          return const _i5.HomeScreen();
         })
   };
 
   @override
   List<_i1.RouteConfig> get routes => [
-        _i1.RouteConfig(MainRoute.name, path: '/', guards: [
-          authGuard
-        ], children: [
+        _i1.RouteConfig(MainRoute.name, path: '/', children: [
           _i1.RouteConfig('#redirect',
               path: '', redirectTo: 'home', fullMatch: true),
           _i1.RouteConfig(HomeRoute.name, path: 'home')

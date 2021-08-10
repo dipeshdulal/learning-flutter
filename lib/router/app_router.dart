@@ -1,6 +1,5 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_rnd/router/guards/auth_guard.dart';
 import 'package:flutter_rnd/screens/home_screen.dart';
 import 'package:flutter_rnd/screens/login_screen.dart';
 import 'package:flutter_rnd/screens/register_screen.dart';
@@ -13,7 +12,6 @@ import 'package:flutter_rnd/screens/register_screen.dart';
       path: "/",
       initial: true,
       name: "MainRoute",
-      guards: [AuthGuard],
       children: [
         AutoRoute(
           page: HomeScreen,

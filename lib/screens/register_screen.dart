@@ -77,23 +77,26 @@ class RegisterScreen extends HookConsumerWidget {
                     },
                     child: Text("Login")),
                 ElevatedButton(
-                  onPressed: !authState.isLoading
-                      ? () async {
-                          if (_formKey.currentState!.validate()) {
-                            await ref
-                                .read(authServiceProvider.notifier)
-                                .registerUser(
-                                  email: emailController.value.text,
-                                  password: passwordController.value.text,
-                                );
-                            AutoRouter.of(context).replaceNamed("/home");
-                          }
+                  onPressed: authState.maybeWhen(
+                    loading: () {},
+                    orElse: () {
+                      return () async {
+                        if (_formKey.currentState!.validate()) {
+                          await ref
+                              .read(authServiceProvider.notifier)
+                              .registerUser(
+                                email: emailController.value.text,
+                                password: passwordController.value.text,
+                              );
+                          AutoRouter.of(context).replaceNamed("/home");
                         }
-                      : null,
+                      };
+                    },
+                  ),
                   child: Row(
                     children: [
-                      if (authState.isLoading)
-                        Row(
+                      authState.maybeWhen(
+                        loading: () => Row(
                           children: [
                             SizedBox(
                               width: 15,
@@ -105,20 +108,24 @@ class RegisterScreen extends HookConsumerWidget {
                             SizedBox(width: 10),
                           ],
                         ),
+                        orElse: () => Container(),
+                      ),
                       Text("Register"),
                     ],
                   ),
                 ),
               ]),
               SizedBox(height: 20),
-              if (authState.hasError)
-                Text(
-                  authState.error ?? "",
+              authState.maybeWhen(
+                error: (error) => Text(
+                  error ?? "",
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
                       ?.copyWith(color: Colors.red),
-                )
+                ),
+                orElse: () => Container(),
+              ),
             ],
           ),
         ),

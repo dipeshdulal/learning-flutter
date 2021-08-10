@@ -1,18 +1,30 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_rnd/services/auth_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LoginScreen extends HookConsumerWidget {
+class LoginScreen extends ConsumerWidget {
   LoginScreen({Key? key}) : super(key: key);
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
+  _handleLogin(BuildContext context, WidgetRef ref) {
+    return () async {
+      if (_formKey.currentState!.validate()) {
+        await ref.read(authServiceProvider.notifier).signIn(
+              email: _emailController.value.text,
+              password: _passwordController.value.text,
+            );
+        AutoRouter.of(context).replaceNamed("/home");
+      }
+    };
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final emailController = useTextEditingController();
-    final passwordController = useTextEditingController();
     final authState = ref.watch(authServiceProvider);
 
     return Scaffold(
@@ -30,7 +42,7 @@ class LoginScreen extends HookConsumerWidget {
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextFormField(
-                controller: emailController,
+                controller: _emailController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Email is required";
@@ -42,7 +54,7 @@ class LoginScreen extends HookConsumerWidget {
                 ),
               ),
               TextFormField(
-                controller: passwordController,
+                controller: _passwordController,
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -61,21 +73,14 @@ class LoginScreen extends HookConsumerWidget {
                   child: Text("Register"),
                 ),
                 ElevatedButton(
-                  onPressed: !authState.isLoading
-                      ? () async {
-                          if (_formKey.currentState!.validate()) {
-                            await ref.read(authServiceProvider.notifier).signIn(
-                                  email: emailController.value.text,
-                                  password: passwordController.value.text,
-                                );
-                            AutoRouter.of(context).replaceNamed("/home");
-                          }
-                        }
-                      : null,
+                  onPressed: authState.maybeWhen(
+                    loading: () {},
+                    orElse: () => _handleLogin(context, ref),
+                  ),
                   child: Row(
                     children: [
-                      if (authState.isLoading)
-                        Row(
+                      authState.maybeWhen(
+                        loading: () => Row(
                           children: [
                             SizedBox(
                               width: 15,
@@ -87,20 +92,24 @@ class LoginScreen extends HookConsumerWidget {
                             SizedBox(width: 10),
                           ],
                         ),
+                        orElse: () => Container(),
+                      ),
                       Text("Login"),
                     ],
                   ),
                 ),
               ]),
               SizedBox(height: 20),
-              if (authState.hasError)
-                Text(
-                  authState.error ?? "",
+              authState.maybeWhen(
+                error: (err) => Text(
+                  err ?? "",
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
                       ?.copyWith(color: Colors.red),
                 ),
+                orElse: () => Container(),
+              ),
               SizedBox(
                 height: 20,
               ),

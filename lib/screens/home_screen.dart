@@ -9,6 +9,11 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authServiceProvider).maybeWhen(
+          user: (u) => u,
+          orElse: () {},
+        );
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
@@ -27,7 +32,7 @@ class HomeScreen extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "${tr('Hello')} ${ref.watch(authServiceProvider).user?.displayName ?? ""}",
+                "${tr('Hello')} ${user?.displayName ?? ""}",
                 style: Theme.of(context).textTheme.headline5,
               )
             ],
