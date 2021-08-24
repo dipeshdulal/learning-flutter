@@ -8,17 +8,9 @@ import 'package:flutter_rnd/screens/register_screen.dart';
   replaceInRouteName: "Screen,Route",
   routes: <AutoRoute>[
     AutoRoute(
-      page: EmptyRouterScreen,
-      path: "/",
+      page: HomeScreen,
+      path: "home",
       initial: true,
-      name: "MainRoute",
-      children: [
-        AutoRoute(
-          page: HomeScreen,
-          path: "home",
-          initial: true,
-        ),
-      ],
     ),
     AutoRoute(page: LoginScreen, path: "/login"),
     AutoRoute(page: RegisterScreen, path: "/register"),
