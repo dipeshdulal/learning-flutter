@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_rnd">
+    package="com.dipesh.test.flutter_rnd">
    <application
         android:label="flutter_rnd"
         android:icon="@mipmap/ic_launcher">
