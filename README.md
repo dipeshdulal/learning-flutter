@@ -4,8 +4,8 @@ Flutter sample project to learn different things in flutter.
 
 ### TODOs
 - [x] Firebase Authentication
-- [ ] Riverpod, Flutter Hooks, Freezed
+- [x] Riverpod, Flutter Hooks, Freezed
 - [ ] Firestore database usage.
-- [ ] Navigation 
+- [x] Navigation 
 - [ ] File Upload and Caching 
 - [ ] Infinite Scrolling 
